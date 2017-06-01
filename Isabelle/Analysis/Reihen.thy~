@@ -1,0 +1,5 @@
+theory Reihen
+imports Main 
+begin 
+
+lemma "abs z < 1 \<Longrightarrow> \<Sum>k=0 .. \<infinity> . z^k = 1/(1-z)  "
