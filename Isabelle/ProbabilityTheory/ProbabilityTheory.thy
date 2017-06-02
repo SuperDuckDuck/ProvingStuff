@@ -1,7 +1,6 @@
-theory Integrals
+theory ProbabilityTheory 
 imports Complex_Main 
 begin 
-
 
 
 
