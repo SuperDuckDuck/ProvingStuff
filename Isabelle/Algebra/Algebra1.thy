@@ -24,3 +24,4 @@ proof -
   also have "\<dots> = a^2 + b*a + a*b +  b^2" by  (simp add :power2_eq_square)
   finally show ?thesis by auto
 qed
+

@@ -63,19 +63,9 @@ proof (induct n)
   also have "\<dots> = ((6*n^2 + 12*n + 6) + (2*n^3 + 3*n^2 + n)) div 6" by (simp add : power2_eq_square power3_eq_cube ring_distribs)
   also  have "\<dots> = (2*n^3 + 9*n^2 + 13*n + 6) div 6 " by simp
   note tmpResult2 =  calculation
-
   from tmpResult1 and tmpResult2 show ?case by simp
 qed
   
-
-  
-
-
-  
-  
-    
-
-
 
 
 lemma " suminf (\<lambda>n. c^n) = (1 / (1 - c))"

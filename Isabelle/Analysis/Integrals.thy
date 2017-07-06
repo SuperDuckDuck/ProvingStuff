@@ -1,7 +1,6 @@
 theory Integrals
-imports Complex_Main 
-begin 
+imports Complex_Main Analysis
+begin
 
-
-
+  
 

@@ -15,26 +15,43 @@ fun lst :: "'a list \<Rightarrow> 'a option " where
 lemma "head [] = None" by simp 
 
 
-lemma "lst (ls @ [a]) = Some a" 
+lemma tmp : "lst (ls @ [a]) = Some a" 
 proof (induct ls)
   case Nil 
   show ?case by simp
  next 
   fix aa ls
   case (Cons aa ls)
-  assume "lst (ls @ [a]) = Some a" 
-  thus ?case by 
+  assume a:"lst (ls @ [a]) = Some a" 
+  show ?case 
+  proof (cases ls)
+    case Nil
+    with a show ?thesis by simp
+  next
+    case (Cons a list)
+    with a  show ?thesis by simp
+  qed
+qed
+  
 
 lemma "head xs = lst (rev xs)" 
 proof (induct xs)
   case Nil
   show ?case by simp
  next 
-  fix a xs x ls
   case (Cons a xs)
   assume "head xs = lst (rev xs)"
-
-  show ?case 
+  thus ?case by (simp add : tmp)
+qed
   
 
+lemma "length xs > 0 \<Longrightarrow> length xs > length (tl xs)" 
+proof (induct xs)
+  case Nil
+  then show ?case by simp
+next
+  case (Cons a xs)
+  show ?case by simp
+qed
 
+  lemma ""
