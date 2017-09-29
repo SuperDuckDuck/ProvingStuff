@@ -22,6 +22,24 @@ proof -
   }
   thus ?thesis by simp
 qed
+
+
+lemma "\<lbrakk> \<And>x . P x \<Longrightarrow> P z  ; P y \<rbrakk> \<Longrightarrow> P z"
+proof -
+  assume a:"\<And>x . P x \<Longrightarrow> P z" and  b:"P y"
+  from a have "\<And>x . P x \<longrightarrow> P z" by (subst (asm) atomize_imp)
+  hence "\<forall>x . P x \<longrightarrow> P z" by (subst (asm) atomize_all)
+  hence "P y \<longrightarrow> P z" by (rule allE)
+  from this and b  show "P z" by (rule mp)
+qed  
+  
+
+lemma "\<lbrakk> \<And>x . P x \<Longrightarrow> P z  ; P y \<rbrakk> \<Longrightarrow> P z"
+proof - 
+  assume a:"\<And>x . P x \<Longrightarrow> P z" and  b:"P y"
+  from a [OF b]  show "P z" by this
+qed
+  
   
   
 lemma "(A \<and> B) \<longleftrightarrow> (\<not> (A \<longrightarrow> \<not>B))"
@@ -59,8 +77,44 @@ proof -
   ultimately show ?thesis by (rule iffI)
 qed
 
-
-
+lemma "A \<or> B \<longleftrightarrow> A \<and> \<not>B \<or> A \<and> B \<or> \<not>A \<and> B"
+proof -
+  {
+    assume a:"A \<or> B"
+    {
+      assume b:"\<not>((A \<and> \<not>B) \<or> (A \<and> B) \<or> (\<not>A \<and> B))"
+      {
+        assume c:A 
+        {
+          assume B 
+          with c have "A \<and> B" ..
+          hence "(A \<and> B) \<or> (\<not>A \<and> B)" ..
+          hence "(A \<and> \<not>B) \<or> (A \<and> B) \<or> (\<not>A \<and> B)" by (rule disjI2)
+          with b have False by contradiction
+        }
+        hence "\<not>B" ..
+        with c have "A \<and> \<not>B" ..
+        hence "(A \<and> \<not>B) \<or> (A \<and> B) \<or> (\<not>A \<and> B)" by blast
+        with b have False by contradiction
+      }
+      note tmp=this
+      {
+        assume B 
+        with b have False by blast
+      }
+      from a tmp this have False by (rule disjE)
+    }
+    hence "(A \<and> \<not>B) \<or> (A \<and> B) \<or> (\<not>A \<and> B)" by blast
+  }
+  moreover
+  {
+    assume "(A \<and> \<not>B) \<or> (A \<and> B) \<or> (\<not>A \<and> B)"
+      
+      
+        
+ 
+                
+          
       
 
     

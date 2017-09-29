@@ -146,7 +146,16 @@ proof -
   also have "\<dots> = {}" by simp
   finally show ?thesis by assumption
 qed
-  
+
+lemma "A \<inter> B = A - (A - B)" by blast
+    
+lemma "A \<inter> B = A - (A - B)"
+proof -
+  {
+    assume "A \<inter> B"
+      
+
+lemma "A \<in> \<A> \<Longrightarrow> B \<in> \<A> \<Longrightarrow> "  
   
 lemma "\<exists>x. x \<in> {n::nat . n \<noteq> 5}" 
   using [[simp_trace_new mode=full]]
@@ -155,7 +164,8 @@ proof -
   proof - 
     assume a:"\<And>y. y \<noteq> (5::nat) \<Longrightarrow> thesis"
       thus thesis using one_eq_numeral_iff by blast
-  
+
+   
 
   
 lemma "A \<noteq> {} = (\<exists>x . x \<in> A)" 
