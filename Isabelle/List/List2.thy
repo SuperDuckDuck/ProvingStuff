@@ -104,4 +104,45 @@ next
   thus  ?case by simp
 qed
   
+primrec reverse_core :: "'a list \<Rightarrow> 'a list \<Rightarrow> 'a list" where
+  "reverse_core [] res = res"|
+  "reverse_core (x#xs) res = reverse_core xs (x#res)"
     
+definition "reverse ls = reverse_core ls []"
+  declare reverse_def [simp]
+lemma "reverse xs @ ys = reverse_core xs ys " 
+proof (induction xs arbitrary : ys )
+  case Nil
+  then show ?case by simp
+next
+  case (Cons a xs)
+  assume hyp:"\<And>ys .reverse xs @ ys = reverse_core xs ys"
+  have "reverse (a#xs) @ ys = reverse_core xs [a] @ ys " by simp
+  also have "\<dots> = reverse xs @ [a] @ ys" using hyp[of "[a]"] by simp
+  also have "\<dots> = reverse xs @ (a # ys)" by simp
+  also have "\<dots> = reverse_core xs (a#ys)" using hyp by simp
+  also have "\<dots> = reverse_core (a#xs) ys" by simp
+  finally show ?case by simp
+qed
+
+lemma helper : "\<forall>ys . reverse xs @ ys = reverse_core xs ys " 
+proof (induction xs)
+  case Nil
+  then show ?case by simp
+next
+  case (Cons a xs)
+  assume hyp:"\<forall>ys. reverse xs @ ys = reverse_core xs ys"
+  {
+    fix ys
+    have tmp1: "reverse xs @ [a] = reverse_core xs [a]" using hyp by simp
+    have "( reverse (a # xs) @ ys) = reverse_core xs [a] @ ys " by simp
+    also have "\<dots> = reverse xs @ [a] @ ys" using tmp1 by simp
+    also have "\<dots> = reverse xs @ (a # ys)" by simp
+    also have "\<dots> = reverse_core xs (a#ys)" using hyp by simp
+    also have "\<dots> = reverse_core (a#xs) ys" by simp
+    finally have "reverse (a # xs) @ ys = reverse_core (a#xs) ys" by assumption
+  }
+  then show ?case by simp
+qed
+  
+  
