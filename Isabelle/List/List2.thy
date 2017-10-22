@@ -144,5 +144,46 @@ next
   }
   then show ?case by simp
 qed
-  
-  
+thm member_rec
+
+theorem "List.member l a  \<Longrightarrow> \<exists> l1 l2. l = l1 @ a # l2" 
+proof (induction l)
+  case Nil
+  assume "List.member [] (a::'a)"
+  then show ?case by (simp add: member_rec(2)) 
+next
+  case (Cons aa l)
+  assume hyp1:" List.member l a \<Longrightarrow> \<exists>l1 l2. l = l1 @ a # l2"
+     and hyp2:"List.member (aa # l) a"
+  from hyp2 have tmp:" (aa = a \<or> List.member l a)" by (simp add : member_rec)
+  {
+    assume c1:"aa  = a"
+    {
+      assume "\<not>(\<exists> l1 l2 . aa # l = l1 @ a # l2)"
+      hence "\<forall>l1 l2 . aa # l \<noteq> l1 @ a # l2" by simp
+      hence "aa # l \<noteq> aa # l" using c1 by auto
+      hence False by simp
+    }
+    hence "\<exists> l1 l2 . aa # l = l1 @ a # l2" by auto
+  }
+  note f1=this
+  {
+    assume c1:"List.member l a"
+    with hyp1 have tmp2:"\<exists>l1 l2. l = l1 @ a # l2" by simp
+    {
+      fix l1 l2
+      assume c2:"l = l1 @ a # l2"
+      {
+        assume "\<not>(\<exists>l1 l2. aa # l = l1 @ a # l2 )"
+        hence "\<forall>l1 l2. aa # l \<noteq> l1 @ a # l2 " by simp
+        hence  "\<forall> l2 . aa # l  \<noteq> ([aa] @ l1) @ a # l2" by (rule allE)
+        hence "aa # l \<noteq>  ([aa] @ l1) @ a # l2" by blast
+        hence "aa # l1 @ a # l2 \<noteq> ([aa] @ l1) @ a # l2" using c2 by simp
+        hence False by simp
+      }
+      hence "\<exists>l1 l2. aa # l = l1 @ a # l2 " by auto
+    }
+    with tmp2 have "\<exists>l1 l2. aa # l = l1 @ a # l2 " by auto
+  }
+  from tmp this and f1 show ?case by auto
+qed 
